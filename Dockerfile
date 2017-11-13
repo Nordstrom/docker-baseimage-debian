@@ -1,17 +1,11 @@
-FROM bitnami/minideb:stretch
+FROM scratch
 MAINTAINER Nordstrom Kubernetes Platform Team "techk8s@nordstrom.com"
 
-RUN apt-get update -qy
+ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get install -qyf \
-  apt-transport-https \
-  ca-certificates \
-  curl
+# this is docker.io/bitnami/minideb:stretch minus some packages we don't need
+ADD build/rootfs.tar /
 
-COPY nordstrom-ca-certs/ /etc/ssl/nordstrom-ca-certs/
-
-RUN useradd --create-home --shell /bin/bash nordstrom
 USER nordstrom
-WORKDIR /
 
 CMD ["/bin/bash"]
